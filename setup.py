@@ -11,6 +11,12 @@ setup(
     author_email="yves@martin.yt",
     url="https://github.com/rouskinlab/seismic2dreem",
     packages=find_packages(),
-    install_requires=['pandas','numpy'],
+    install_requires=['pandas','numpy','click'],
     python_requires=">=3.9",
+    # add entry point
+    entry_points={
+        'console_scripts': [
+            'seismic2dreem = seismic2dreem.cli:cli'
+        ]
+    },
 )
