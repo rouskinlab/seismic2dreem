@@ -31,7 +31,7 @@ def run(seismic_folder_path:str, dreem_output_dir:str, beautify_json:bool=True, 
                 for section in seismic_path.list_sections(sample, construct):
                     out[construct][section] = {}
                     try:
-                        out[construct][section]['pop_avg'] = seismic_csv_to_dreem_json(seismic_path.get_csv_path(sample, construct, section))
+                        out[construct][section] = seismic_csv_to_dreem_json(seismic_path.get_csv_path(sample, construct, section))
                     except FileNotFoundError:
                         if verbose:
                             print(f"WARNING: no csv found for {sample}/{construct}/{section}")
@@ -41,12 +41,14 @@ def run(seismic_folder_path:str, dreem_output_dir:str, beautify_json:bool=True, 
                     except Exception as e:
                         if verbose:
                             print(f"WARNING: {e} for {sample}/{construct}/{section}")
-                    finally:
-                        if not out[construct][section].get('pop_avg'):
-                            out[construct][section]['pop_avg'] = {}
                 
             # clean up empty constructs
-            out = {k:v for k,v in out.items() if v != {"full": {"pop_avg": {}}}}
+            for construct in seismic_path.list_constructs(sample):
+                if len(out[construct]) == 1:
+                    if len(out[construct][list(out[construct].keys())[0]]) == 0:
+                        del out[construct]
+                        
+            # Save to file
             path = join(dreem_output_dir, sample + ".json")
             
             # warning if file already exists

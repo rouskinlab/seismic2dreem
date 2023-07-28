@@ -4,7 +4,7 @@ readme = open('README.md').read()
 
 setup(
     name="seismic2dreem",
-    version='0.0.0',
+    version='0.0.1',
     description="Converts seismic data to dreem format",
     long_description=readme,
     author="Yves Martin des Taillades for the Rouskin Lab",

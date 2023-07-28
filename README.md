@@ -30,6 +30,6 @@ seismic2dreem seismic_main_folder another_seismic_main_folder -o dreem_output_di
 [MIT](https://choosealicense.com/licenses/mit/)
 
 
-## Authors
+## Author
 
 Yves Martin des Taillades
