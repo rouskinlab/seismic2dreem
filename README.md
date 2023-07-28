@@ -26,9 +26,6 @@ seismic2dreem.run(
 seismic2dreem seismic_main_folder another_seismic_main_folder -o dreem_output_dir --beautify_json --verbose
 ```
 
-
-Output dreem files will be in the dreem_output_dir folder.
-
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
 
