@@ -23,7 +23,8 @@ seismic2dreem.run(
 ### Command line
 
 ```bash
-seismic2dreem path/to/this/input path/to/this/other/input -o dreem_output_dir --beautify_json --verbose
+seismic2dreem --help
+seismic2dreem path/to/this/input path/to/this/other/input -o path/to/output/dir --beautify --verbose
 ```
 
 ## License
