@@ -14,9 +14,10 @@ pip install seismic2dreem
 ```python
 import seismic2dreem
 seismic2dreem.run(
-    seismic_folder_path = 'seismic_main_folder',  # path to the folder containing the seismic output. Can be a list of folders.
-    dreem_output_dir = 'dreem_output_dir',        # path to the folder where the dreem output will be written
-    beautify_json = True,                         # if True, the json files will be beautified. 10x slower and can generate bugs
+    seismic_dir = 'seismic_main_folder',  # path to the folder containing the seismic output. Can be a list of folders.
+    output = 'dreem_output_dir',        # path to the folder where the dreem output will be written
+    ow = False,                             # if True, existing files will be overwritten.
+    beautify = True,                         # if True, the json files will be beautified. 10x slower and can generate bugs
     verbose = True)                              # if True, print the progress of the conversion
 ```
 
@@ -24,13 +25,15 @@ seismic2dreem.run(
 
 ```bash
 seismic2dreem --help
-seismic2dreem path/to/this/input path/to/this/other/input -o path/to/output/dir --beautify --verbose
+seismic2dreem path/to/this/input path/to/this/other/input -o path/to/output/dir --ow --beautify --verbose
 ```
 
 ## License
+
 [MIT](https://choosealicense.com/licenses/mit/)
 
 
 ## Author
 
 Yves Martin des Taillades
+

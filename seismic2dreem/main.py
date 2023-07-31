@@ -5,26 +5,33 @@ from .path import SeismicPath
 from .translation import seismic_csv_to_dreem_json
 
 
-def run(seismic_folder_path:str, dreem_output_dir:str, beautify_json:bool=True, verbose:bool=True):
+def run(seismic_dir:str, output:str, ow=False, beautify:bool=True, verbose:bool=True):
     """A function to convert a seismic folder to a dreem json output.
     
     Arguments:
-        seismic_folder_path {str} -- The path to the seismic folder
-        dreem_output_dir {str} -- The path to the output directory
-        beautify_json {bool} -- Whether to beautify the json output (default: True). Deactivate for faster processing and less possible errors.
+        seismic_dir {str} -- The path to the seismic folder
+        output {str} -- The path to the output directory
+        ow {bool} -- Whether to overwrite an existing file
+        beautify {bool} -- Whether to beautify the json output (default: True). Deactivate for faster processing and less possible errors.
         verbose {bool} -- Whether to print warnings (default: True)
-        
+
     Returns:
         None
     """
     
-    if type(seismic_folder_path) == str:
-        seismic_folder_path = [seismic_folder_path]
+    if type(seismic_dir) == str:
+        seismic_dir = [seismic_dir]
             
-    for this_seismic_folder_path in seismic_folder_path:
-        seismic_path = SeismicPath(this_seismic_folder_path)
+    for p in seismic_dir:
+        seismic_path = SeismicPath(p)
             
         for sample in seismic_path.list_samples():
+            
+            path = join(output, sample + ".json")
+            if exists(path) and not ow and verbose:
+                print(f"WARNING: {path} already exists")
+                continue
+            
             out = {'sample': sample}
             for construct in seismic_path.list_constructs(sample):
                 out[construct] = {}
@@ -49,16 +56,6 @@ def run(seismic_folder_path:str, dreem_output_dir:str, beautify_json:bool=True, 
                         del out[construct]
                         
             # Save to file
-            path = join(dreem_output_dir, sample + ".json")
-            
-            # warning if file already exists
-            if exists(path):
-                print(f"WARNING: {path} already exists")
-            
-            if beautify_json:
-                dump_json(out, path)
-            else:
-                with open(path, 'w') as f:
-                    json.dump(out, f)
+            dump_json(out, path, beautify=beautify)
             if verbose:
                 print(f"saved {sample}.json to {seismic_path.get_sample_path(sample)}")

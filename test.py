@@ -8,9 +8,10 @@ def test_end2end():
     # capture the output
     with contextlib.redirect_stdout(StringIO()) as f:
         run(
-            seismic_folder_path='/Users/ymdt/src/seismic2dreem/test_files/dragui_rerun', 
-            dreem_output_dir='/Users/ymdt/src/seismic2dreem/test_files', 
-            beautify_json=False,
+            seismic_dir='/Users/ymdt/src/seismic2dreem/test_files/dragui_rerun', 
+            output='/Users/ymdt/src/seismic2dreem/test_files', 
+            ow=True,
+            beautify=True,
             verbose=True)
         
         f = f.getvalue()

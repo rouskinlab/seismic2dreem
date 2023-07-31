@@ -43,7 +43,10 @@ class NpEncoder(json.JSONEncoder):
         return super(NpEncoder, self).default(obj)
 
 
-def dump_json(data, path):
+def dump_json(data, path, beautify=True):
+    """Beautifies and 
+    
+    """
     import json
     assert isdir(dirname(path)), f"output directory does not exist: {dirname(path)}"
     
@@ -54,10 +57,13 @@ def dump_json(data, path):
     # Make lists in one line
     out = json.dumps(out, cls=NpEncoder, indent=2)
 
-    out = out.replace(']','[').split('[')
-    out = [o.replace('\n        ','') if i%2 else o for i, o in enumerate(out)]
-    out = out[0] + ''.join([('[',']')[i%2] + o for i, o in enumerate(out[1:])])
-    
+    if beautify:
+        out = list(out)
+        out = ''.join(['[' if i == ']' else i for i in out])
+        out = out.split('[')
+        out = [o.replace('\n        ','') if i%2 else o for i, o in enumerate(out)]
+        out = out[0] + ''.join([('[',']')[i%2] + o for i, o in enumerate(out[1:])])
+        
     # Write the output
     with open(os.path.join(path), 'w') as f:
         f.write(out)
