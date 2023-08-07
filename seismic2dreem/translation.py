@@ -7,6 +7,8 @@ import os
 
 translation_arrays = {
     "Called": 'cov',
+    "Covered" : 'cov',
+    "Informed": 'info',
     "Subbed": 'sub_N',
     "Subbed-A": 'sub_A',
     "Subbed-C": 'sub_C',
@@ -24,10 +26,12 @@ def seismic_csv_to_dreem_json(csv_path:str):
     # convert to json
     d = {}
     for k, v in translation_arrays.items():
-        d[v] = np.array(i[k], dtype=np.int64).tolist()
+        if k in i.columns:
+            d[v] = np.array(i[k], dtype=np.int64).tolist()
     d['min_cov'] = min(d['cov'])
-    d['info'] = (i['Mutated'] + i['Matched']).tolist()
-    d['sub_rate'] = (np.array(d['sub_N']) / np.array(d['info'])).tolist()
+    if 'info' not in d.keys():
+        d['info'] = (i['Mutated'] + i['Matched']).tolist()
+    d['sub_rate'] = np.divide(np.array(d['sub_N']).astype(float), np.array(d['info']).astype(float), out=np.zeros_like(np.array(d['sub_N']).astype(float)), where= np.array(d['info'])!=0).tolist()
     
     # add sub_hist from relate-per-read.csv.gz
     d['sub_hist'] = read_num_of_mutations(csv_path.replace('relate-per-pos.csv', 'relate-per-read.csv.gz'))

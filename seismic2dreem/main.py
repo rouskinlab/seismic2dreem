@@ -44,10 +44,10 @@ def run(seismic_dir:str, output:str, ow=False, beautify:bool=True, verbose:bool=
                             print(f"WARNING: no csv found for {sample}/{construct}/{section}")
                     except ValueError as e:
                         if verbose:
-                            print(f"WARNING: {e} for {sample}/{construct}/{section}")
+                            print(f"WARNING value error: {e} for {sample}/{construct}/{section}")
                     except Exception as e:
                         if verbose:
-                            print(f"WARNING: {e} for {sample}/{construct}/{section}")
+                            print(f"WARNING: exception {e} for {sample}/{construct}/{section}")
                 
             # clean up empty constructs
             for construct in seismic_path.list_constructs(sample):

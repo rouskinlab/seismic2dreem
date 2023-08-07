@@ -6,8 +6,16 @@ class SeismicPath:
     
     def __init__(self, root:str) -> None:
         assert isdir(root), f"seismic_folder_path is not a directory: {root}"
-        self.root = join(root, "out",'table')
+        self.root = self.find_table(root)
         assert isdir(self.root), f"seismic_folder_path does not contain a 'out/table' directory: {root}"
+        
+    def find_table(self, root):
+        paths = os.walk(root)
+        for path in paths:
+            path = path[0]
+            if path.split('/')[-1] == 'table':
+                return path
+        raise FileNotFoundError("No table directory found")
     
     def list_csvs(self):
         for sample in self.list_samples():

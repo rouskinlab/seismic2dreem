@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="seismic2dreem",
-    version='0.0.2',
+    version='0.0.3',
     description="Converts seismic data to dreem format",
     author="Yves Martin des Taillades for the Rouskin Lab",
     author_email="yves@martin.yt",
