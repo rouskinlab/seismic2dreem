@@ -4,10 +4,11 @@ from os.path import join, isfile, isdir, dirname
 
 class SeismicPath:
     
-    def __init__(self, root:str) -> None:
+    def __init__(self, root:str, mask:bool) -> None:
         assert isdir(root), f"seismic_folder_path is not a directory: {root}"
         self.root = self.find_table(root)
         assert isdir(self.root), f"seismic_folder_path does not contain a 'out/table' directory: {root}"
+        self.mask = mask
         
     def find_table(self, root):
         paths = os.walk(root)
@@ -33,7 +34,10 @@ class SeismicPath:
         return join(self.get_construct_path(sample, construct), section)
     
     def get_csv_path(self, sample:str, construct:str, section:str):
-        return join(self.get_section_path(sample, construct, section), "relate-per-pos.csv")
+        return join(self.get_section_path(sample, construct, section), "mask-per-pos.csv" if self.mask else "relate-per-pos.csv")
+    
+    def get_csv_gz_path(self, sample:str, construct:str, section:str):
+        return join(self.get_section_path(sample, construct, section), "relate-per-read.csv.gz")
     
     def list_samples(self):
         l = os.listdir(self.root)

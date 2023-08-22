@@ -18,7 +18,7 @@ translation_arrays = {
     "Inserted": 'ins',
 }
 
-def seismic_csv_to_dreem_json(csv_path:str):
+def seismic_csv_to_dreem_json(csv_path:str, csv_gz_path:str, mask:bool=True):
     # load csv
     i = pd.read_csv(csv_path)
     sequence = ''.join(i['Base'].tolist())
@@ -27,16 +27,23 @@ def seismic_csv_to_dreem_json(csv_path:str):
     d = {}
     for k, v in translation_arrays.items():
         if k in i.columns:
-            d[v] = np.array(i[k], dtype=np.int64).tolist()
-    d['min_cov'] = min(d['cov'])
+            d[v] = np.array(i[k], dtype=float)
+
+    d['min_cov'] = np.min(d['cov'][~np.isnan(d['cov'])])
     if 'info' not in d.keys():
-        d['info'] = (i['Mutated'] + i['Matched']).tolist()
-    d['sub_rate'] = np.divide(np.array(d['sub_N']).astype(float), np.array(d['info']).astype(float), out=np.zeros_like(np.array(d['sub_N']).astype(float)), where= np.array(d['info'])!=0).tolist()
+        d['info'] = (i['Mutated'] + i['Matched'])
+    d['sub_rate'] = d['sub_N']/d['info'] #, out=0*np.ones_like(np.array(d['sub_N']).astype(float)), where= np.array(d['sub_N']).astype(float) != 0)
+
+    if mask:
+        for k, v in translation_arrays.items():
+            d[v] = np.nan_to_num(d[v], nan=-1000).tolist()
+        d['sub_rate'] = np.nan_to_num(d['sub_rate'], nan=-1000).tolist()
     
     # add sub_hist from relate-per-read.csv.gz
-    d['sub_hist'] = read_num_of_mutations(csv_path.replace('relate-per-pos.csv', 'relate-per-read.csv.gz'))
+    d['sub_hist'] = read_num_of_mutations(csv_gz_path)
     
     return {'sequence': sequence, 'pop_avg': d}
+
 
 def read_num_of_mutations(csv_gz_path:str):
     csv_path = untar_csv_gz(csv_gz_path)
