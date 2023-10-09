@@ -9,6 +9,18 @@ pip install seismic2dreem
 
 ## Usage
 
+You need a seismic file structure such as:
+
+```
+dreem_output_dir/
+    sample1/
+        table/
+            reference1/
+                section1/
+                    relate-per-read.csv.gz
+                    mask-per-pos.csv
+```
+
 ### Python
 
 ```python
@@ -26,7 +38,7 @@ seismic2dreem.run(
 
 ```bash
 seismic2dreem --help
-seismic2dreem path/to/this/input path/to/this/other/input -o path/to/output/dir --ow --beautify --verbose
+seismic2dreem path/to/this/seismic_main_folder path/to/this/other/seismic_main_folder -o path/to/dreem_output_dir --ow --beautify --verbose
 ```
 
 ## License

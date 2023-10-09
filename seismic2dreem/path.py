@@ -6,17 +6,17 @@ class SeismicPath:
     
     def __init__(self, root:str, mask:bool) -> None:
         assert isdir(root), f"seismic_folder_path is not a directory: {root}"
-        self.root = self.find_table(root)
-        assert isdir(self.root), f"seismic_folder_path does not contain a 'out/table' directory: {root}"
+        self.root = root
+      #  assert isdir(self.root), f"seismic_folder_path does not contain a 'out/table' directory: {root}"
         self.mask = mask
         
-    def find_table(self, root):
-        paths = os.walk(root)
-        for path in paths:
-            path = path[0]
-            if path.split('/')[-1] == 'table':
-                return path
-        raise FileNotFoundError("No table directory found")
+    # def find_table(self, root):
+    #     paths = os.walk(root)
+    #     for path in paths:
+    #         path = path[0]
+    #         if path.split('/')[-1] == 'table':
+    #             return path
+    #     raise FileNotFoundError("No table directory found")
     
     def list_csvs(self):
         for sample in self.list_samples():
@@ -28,7 +28,7 @@ class SeismicPath:
         return join(self.root, sample)
     
     def get_construct_path(self, sample:str, construct:str):
-        return join(self.get_sample_path(sample), construct)
+        return join(self.get_sample_path(sample), 'table', construct)
     
     def get_section_path(self, sample:str, construct:str, section:str):
         return join(self.get_construct_path(sample, construct), section)
@@ -47,7 +47,7 @@ class SeismicPath:
         return l
 
     def list_constructs(self, sample:str):
-        l = os.listdir(self.get_sample_path(sample))
+        l = os.listdir(join(self.get_sample_path(sample), 'table'))
         # remove non-directories
         l = [x for x in l if isdir(self.get_construct_path(sample, x))]
         if not len(l): print(f"no constructs found in {self.get_sample_path(sample)}")
