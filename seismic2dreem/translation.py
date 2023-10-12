@@ -9,7 +9,8 @@ translation_arrays = {
     "Called": 'cov',
     "Covered" : 'cov',
     "Informed": 'info',
-    "Subbed": 'sub_N',
+    "Mutated": 'mut', #TODO
+    "Subbed": 'sub_N', 
     "Subbed-A": 'sub_A',
     "Subbed-C": 'sub_C',
     "Subbed-G": 'sub_G',
@@ -32,7 +33,7 @@ def seismic_csv_to_dreem_json(csv_path:str, csv_gz_path:str, mask:bool=True):
     d['min_cov'] = np.min(d['cov'][~np.isnan(d['cov'])]) if 'cov' in d.keys() and len(d['cov'][~np.isnan(d['cov'])]) else 0
     if 'info' not in d.keys():
         d['info'] = (i['Mutated'] + i['Matched'])
-    d['sub_rate'] = d['sub_N']/d['info'] 
+    d['sub_rate'] = d['mut']/d['info'] 
     #, out=0*np.ones_like(np.array(d['sub_N']).astype(float)), where= np.array(d['sub_N']).astype(float) != 0)
 
     if mask:

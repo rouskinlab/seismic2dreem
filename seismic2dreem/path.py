@@ -37,8 +37,7 @@ class SeismicPath:
         return join(self.get_section_path(sample, construct, section), "mask-per-pos.csv" if self.mask else "relate-per-pos.csv")
     
     def get_csv_gz_path(self, sample:str, construct:str, section:str):
-        return join(self.get_section_path(sample, construct, section), "relate-per-read.csv.gz")
-    
+        return join(self.get_section_path(sample, construct, section), "mask-per-read.csv.gz" if self.mask else "relate-per-read.csv.gz")
     def list_samples(self):
         l = os.listdir(self.root)
         # remove non-directories
